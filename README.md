@@ -1,6 +1,5 @@
 # Demo App
 This react app can be used as the base when initially setting up your CI/CD pipeline using AWS etc.
-Simple change to illustrate in place editing.
 
 ## Available Scripts
 
