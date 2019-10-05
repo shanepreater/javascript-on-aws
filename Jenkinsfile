@@ -5,7 +5,7 @@ pipeline {
      tools {nodejs "nodeJs"}
 
     stages {
-        stage('Build') {
+        stage('Setup') {
             steps {
                 sh 'npm install'
             }
@@ -15,10 +15,12 @@ pipeline {
                 sh 'npm run test'
             }
         }
+        stage ('Build') {
+                sh 'npm run build'
+        }
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
-                sh 'npm run build'
             }
         }
     }
