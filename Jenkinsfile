@@ -15,6 +15,11 @@ pipeline {
                 sh 'npm run test:once'
             }
         }
+        stage('SonarQube analysis') {
+            withSonarQubeEnv() {
+                sh "npm run sonar"
+            }
+        }
         stage ('Build') {
             steps {
                 sh 'npm run build'
