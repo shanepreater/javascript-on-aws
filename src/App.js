@@ -8,9 +8,11 @@ function App() {
     <div className="App" id="app">
       <header className="App-header" id="main-header">
         <a href="https://www.shanepreater.dev/"><img src={logo} className="App-logo" alt="logo" /></a>
+      </header>
+      <body id="main-content">
         <h3>Sample TODO App</h3>
         <ToDoContainer/>
-      </header>
+      </body>
     </div>
   );
 }
