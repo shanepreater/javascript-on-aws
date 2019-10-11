@@ -13,10 +13,6 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'npm run test:once'
-            }
-        }
-        stage('SonarQube analysis') {
-            steps {
                 withSonarQubeEnv('sonar') {
                     sh "npm run sonar"
                 }
