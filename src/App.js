@@ -1,23 +1,15 @@
 import React from 'react';
-import logo from './logo.svg';
+import logo from './logo.png';
 import './App.css';
+import {ToDoContainer} from "./ToDoContainer";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className="App" id="app">
+      <header className="App-header" id="main-header">
+        <a href="https://www.shanepreater.dev/"><img src={logo} className="App-logo" alt="logo" /></a>
+        <h3>Sample TODO App</h3>
+        <ToDoContainer/>
       </header>
     </div>
   );
