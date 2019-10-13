@@ -27,7 +27,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
                     echo "Building docker image javascriptonaws:${env.BUILD_ID}"
                     script {
-                        sh 'docker login --username ${user} --password ${password}'
+                        sh "docker login --username $user --password $password"
                         echo "Login complete. Building image..."
                         sh "docker build -t javascriptonaws:${env.BUILD_ID} ."
                         echo "Image built. Tagging with latest"
