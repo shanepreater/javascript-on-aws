@@ -2,8 +2,7 @@
 pipeline {
     agent any
 
-     tools {nodejs "nodeJs"}
-     tools {org.jenkinsci.plugins.docker.commons.tools.DockerTool "docker"}
+    tools { nodejs "nodeJs" }
 
     stages {
         stage('Setup') {
@@ -19,15 +18,13 @@ pipeline {
                 }
             }
         }
-        stage ('Build') {
+        stage('Build') {
             when {
-                expression {
-                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
-                }
+                branch 'master'
             }
             steps {
-                script {
-                    def customImage = docker.build("${env.DOCKER_REPOSITORY}/javascriptonaws:${env.BUILD_ID}")
+                withDockerRegistry('dockerhub') {
+                    docker.build "${env.DOCKER_REPOSITORY}/javascriptonaws:${env.BUILD_ID}"
                     customImage.push()
                     customImage.push('latest')
                 }
@@ -36,9 +33,6 @@ pipeline {
         stage('Deploy') {
             when {
                 branch 'master'
-                expression {
-                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
-                }
             }
             steps {
                 sh 'echo deploying to AWS'
