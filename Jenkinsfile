@@ -2,7 +2,8 @@
 pipeline {
     agent any
 
-    tools { nodejs "nodeJs" }
+    tools { nodejs "nodeJs"}
+
 
     stages {
         stage('Setup') {
@@ -23,10 +24,11 @@ pipeline {
                 branch 'master'
             }
             steps {
-                withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
                     echo "Building docker image javascriptonaws:${env.BUILD_ID}"
                     script {
-                        docker.build "${env.DOCKER_ID}/javascriptonaws:${env.BUILD_ID}"
+                        docker.login ${user} ${password}
+                        def customImage = docker.build "${env.DOCKER_ID}/javascriptonaws:${env.BUILD_ID}"
                         customImage.push()
                         customImage.push('latest')
                     }
