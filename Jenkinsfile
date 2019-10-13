@@ -23,7 +23,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                withDockerRegistry('dockerhub') {
+                withCredentials('dockerhub') {
                     script {
                         docker.build "${env.DOCKER_REPOSITORY}/javascriptonaws:${env.BUILD_ID}"
                         customImage.push()
