@@ -24,7 +24,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'password', usernameVariable: 'user')]) {
                     echo "Building docker image javascriptonaws:${env.BUILD_ID}"
                     script {
                         sh "docker login --username $user --password $password"
