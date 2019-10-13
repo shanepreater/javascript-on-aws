@@ -2,7 +2,8 @@
 pipeline {
     agent any
 
-     tools {nodejs "nodeJs"}
+     tools {nodejs "nodeJs",
+            docker "docker"}
 
     stages {
         stage('Setup') {
@@ -25,7 +26,9 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                def customImage = docker.build("${env.DOCKER_REPOSITORY}/javascriptonaws:${env.BUILD_ID}")
+                customImage.push()
+                customImage.push('latest')
             }
         }
     }
