@@ -24,9 +24,11 @@ pipeline {
             }
             steps {
                 withDockerRegistry('dockerhub') {
-                    docker.build "${env.DOCKER_REPOSITORY}/javascriptonaws:${env.BUILD_ID}"
-                    customImage.push()
-                    customImage.push('latest')
+                    script {
+                        docker.build "${env.DOCKER_REPOSITORY}/javascriptonaws:${env.BUILD_ID}"
+                        customImage.push()
+                        customImage.push('latest')
+                    }
                 }
             }
         }
