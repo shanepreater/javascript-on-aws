@@ -24,8 +24,9 @@ pipeline {
             }
             steps {
                 withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
+                    echo "Building docker image javascriptonaws:${env.BUILD_ID}"
                     script {
-                        docker.build "${env.DOCKER_REPOSITORY}/javascriptonaws:${env.BUILD_ID}"
+                        docker.build "${env.DOCKER_ID}/javascriptonaws:${env.BUILD_ID}"
                         customImage.push()
                         customImage.push('latest')
                     }
