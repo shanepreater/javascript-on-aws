@@ -2,8 +2,8 @@
 pipeline {
     agent any
 
-     tools {nodejs "nodeJs",
-            docker "docker"}
+     tools {nodejs "nodeJs"}
+     tools {docker "docker"}
 
     stages {
         stage('Setup') {
@@ -20,15 +20,28 @@ pipeline {
             }
         }
         stage ('Build') {
+            when {
+                expression {
+                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
+                }
+            }
             steps {
-                sh 'npm run build'
+                script {
+                    def customImage = docker.build("${env.DOCKER_REPOSITORY}/javascriptonaws:${env.BUILD_ID}")
+                    customImage.push()
+                    customImage.push('latest')
+                }
             }
         }
         stage('Deploy') {
+            when {
+                branch 'master'
+                expression {
+                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
+                }
+            }
             steps {
-                def customImage = docker.build("${env.DOCKER_REPOSITORY}/javascriptonaws:${env.BUILD_ID}")
-                customImage.push()
-                customImage.push('latest')
+                sh 'echo deploying to AWS'
             }
         }
     }
