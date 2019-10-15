@@ -6,6 +6,7 @@ pipeline {
 
     environment {
         DOCKER_ID = "shanepreater"
+        IMAGE_NAME = "javascriptonaws"
     }
 
     stages {
@@ -32,11 +33,11 @@ pipeline {
                     script {
                         sh "docker login --username $user --password $password"
                         echo "Login complete. Building image..."
-                        sh "docker build -t shanepreater/javascriptonaws:${env.BUILD_ID} ."
+                        sh "docker build -t ${env.DOCKER_ID/${env.IMAGE_NAME}:${env.BUILD_ID} ."
                         echo "Image built. Tagging with latest"
-                        sh "docker tag ${env.DOCKER_ID}/javascriptonaws:${env.BUILD_ID} ${env.DOCKER_ID}/javascriptonaws:latest"
-                        sh "docker push ${env.DOCKER_ID}/javascriptonaws:${env.BUILD_ID}"
-                        sh "docker push ${env.DOCKER_ID}/javascriptonaws:latest"
+                        sh "docker tag ${env.DOCKER_ID}/${env.IMAGE_NAME}:${env.BUILD_ID} ${env.DOCKER_ID}/${env.IMAGE_NAME}:latest"
+                        sh "docker push ${env.DOCKER_ID}/${env.IMAGE_NAME}:${env.BUILD_ID}"
+                        sh "docker push ${env.DOCKER_ID}/${env.IMAGE_NAME}:latest"
                         echo "Pushed with tags."
                     }
                 }
