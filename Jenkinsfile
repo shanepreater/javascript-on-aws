@@ -4,6 +4,9 @@ pipeline {
 
     tools { nodejs "nodeJs"}
 
+    environment {
+        DOCKER_ID = "shanepreater"
+    }
 
     stages {
         stage('Setup') {
@@ -20,9 +23,6 @@ pipeline {
             }
         }
         stage('Build') {
-            env {
-                DOCKER_ID: "shanepreater"
-            }
             when {
                 branch 'master'
             }
