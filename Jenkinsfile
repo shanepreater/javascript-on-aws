@@ -20,6 +20,9 @@ pipeline {
             }
         }
         stage('Build') {
+            env {
+                DOCKER_ID: "shanepreater"
+            }
             when {
                 branch 'master'
             }
@@ -29,11 +32,11 @@ pipeline {
                     script {
                         sh "docker login --username $user --password $password"
                         echo "Login complete. Building image..."
-                        sh "docker build -t javascriptonaws:${env.BUILD_ID} ."
+                        sh "docker build -t shanepreater/javascriptonaws:${env.BUILD_ID} ."
                         echo "Image built. Tagging with latest"
-                        sh "docker tag javascriptonaws:${env.BUILD_ID} javascriptonaws:latest"
-                        sh "docker push javascriptonaws:${env.BUILD_ID}"
-                        sh "docker push javascriptonaws:latest"
+                        sh "docker tag ${env.DOCKER_ID}/javascriptonaws:${env.BUILD_ID} ${env.DOCKER_ID}/javascriptonaws:latest"
+                        sh "docker push ${env.DOCKER_ID}/javascriptonaws:${env.BUILD_ID}"
+                        sh "docker push ${env.DOCKER_ID}/javascriptonaws:latest"
                         echo "Pushed with tags."
                     }
                 }
