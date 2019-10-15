@@ -48,7 +48,23 @@ pipeline {
                 branch 'master'
             }
             steps {
-                sh 'echo deploying to AWS'
+               echo 'deploying to AWS'
+                echo " -> Creating the Dockerrun.aws.json file"
+                writeFile file: 'Dockerrun.aws.json', text: """
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "${env.DOCKER_ID}/${env.IMAGE_NAME}:${env.BUILD_ID}",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "3000"
+    }
+  ]
+}
+"""
+                sh 'cat Dockerrun.aws.json'
             }
         }
     }
