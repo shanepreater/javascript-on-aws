@@ -33,7 +33,7 @@ pipeline {
                     script {
                         sh "docker login --username $user --password $password"
                         echo "Login complete. Building image..."
-                        sh "docker build -t ${env.DOCKER_ID/${env.IMAGE_NAME}:${env.BUILD_ID} ."
+                        sh "docker build -t ${env.DOCKER_ID}/${env.IMAGE_NAME}:${env.BUILD_ID} ."
                         echo "Image built. Tagging with latest"
                         sh "docker tag ${env.DOCKER_ID}/${env.IMAGE_NAME}:${env.BUILD_ID} ${env.DOCKER_ID}/${env.IMAGE_NAME}:latest"
                         sh "docker push ${env.DOCKER_ID}/${env.IMAGE_NAME}:${env.BUILD_ID}"
