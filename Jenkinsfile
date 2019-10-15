@@ -2,7 +2,7 @@
 pipeline {
     agent any
 
-    tools { nodejs "nodeJs"}
+    tools { nodejs "nodeJs" }
 
     environment {
         DOCKER_ID = "shanepreater"
@@ -48,10 +48,9 @@ pipeline {
                 branch 'master'
             }
             steps {
-               echo 'deploying to AWS'
+                echo 'deploying to AWS'
                 echo " -> Creating the Dockerrun.aws.json file"
-                writeFile file: 'Dockerrun.aws.json', text: """
-{
+                writeFile file: 'Dockerrun.aws.json', text: """{
   "AWSEBDockerrunVersion": "1",
   "Image": {
     "Name": "${env.DOCKER_ID}/${env.IMAGE_NAME}:${env.BUILD_ID}",
@@ -64,7 +63,17 @@ pipeline {
   ]
 }
 """
-                sh 'cat Dockerrun.aws.json'
+                echo " -> Updating the S3 bucket"
+                sh "aws s3 mb s3://${env.DOCKER_ID}-${IMAGE_NAME}-${env.BUILD_ID}"
+
+                echo " -> Uploading Dockerrun.aws.json"
+                sh "aws s3 cp Dockerrun.aws.json s3://${env.DOCKER_ID}-${IMAGE_NAME}-${env.BUILD_ID}"
+
+                echo " -> Creating application version"
+                sh "aws elasticbeanstalk create-application-version --application-name ${env.IMAGE_NAME} --version-label v${env.BUILD_ID} --source-bundle S3Bucket=s3://${env.DOCKER_ID}-${IMAGE_NAME}-${env.BUILD_ID},S3Key=Dockerrun.aws.json"
+
+                echo " -> Deploying new version"
+                sh "aws elasticbeanstalk update-application-version --application-name ${env.IMAGE_NAME} --version-label v${env.BUILD_ID}"
             }
         }
     }
