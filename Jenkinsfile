@@ -29,7 +29,7 @@ pipeline {
                     script {
                         sh "docker login --username $user --password $password"
                         echo "Login complete. Building image..."
-                        docker.build -t javascriptonaws:${env.BUILD_ID} ."
+                        sh 'docker build -t javascriptonaws:${env.BUILD_ID} ."
                         echo "Image built. Tagging with latest"
                         sh "docker tag javascriptonaws:${env.BUILD_ID} javascriptonaws:latest"
                         sh "docker push javascriptonaws:${env.BUILD_ID}"
