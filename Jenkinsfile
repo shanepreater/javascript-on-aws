@@ -1,5 +1,9 @@
 #!groovy
 pipeline {
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+    }
+
     agent any
 
     tools { nodejs "nodeJs" }
@@ -78,6 +82,12 @@ pipeline {
 
                 echo " -> Upgrading the ${env.ENVIRONMENT_NAME} with the new deployment"
                 sh "aws elasticbeanstalk update-environment --environment-name ${env.ENVIRONMENT_NAME} --application-name ${env.IMAGE_NAME} --version-label v${env.BUILD_ID}"
+            }
+        }
+        stage("Post build cleanup") {
+            steps {
+                echo "Cleaning up the docker images to conserve space"
+                sh "docker rmi -f `docker images ${env.DOCKER_ID}/${env.IMAGE_NAME}:${env.BUILD_ID} -q`"
             }
         }
     }
