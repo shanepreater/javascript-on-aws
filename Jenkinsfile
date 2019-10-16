@@ -7,6 +7,7 @@ pipeline {
     environment {
         DOCKER_ID = "shanepreater"
         IMAGE_NAME = "javascriptonaws"
+        ENVIRONMENT_NAME = "staging"
     }
 
     stages {
@@ -74,6 +75,9 @@ pipeline {
 
                 echo " -> Deploying new version"
                 sh "aws elasticbeanstalk update-application-version --application-name ${env.IMAGE_NAME} --version-label v${env.BUILD_ID}"
+
+                echo " -> Upgrading the ${env.ENVIRONMENT_NAME} with the new deployment"
+                sh "aws elasticbeanstalk update-environment --environment-name ${env.ENVIRONMENT_NAME} --application-name ${env.IMAGE_NAME} --version-label v${env.BUILD_ID}"
             }
         }
     }
