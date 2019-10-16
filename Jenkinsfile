@@ -70,7 +70,7 @@ pipeline {
                 sh "aws s3 cp Dockerrun.aws.json s3://${env.DOCKER_ID}-${IMAGE_NAME}-${env.BUILD_ID}"
 
                 echo " -> Creating application version"
-                sh "aws elasticbeanstalk create-application-version --application-name ${env.IMAGE_NAME} --version-label v${env.BUILD_ID} --source-bundle S3Bucket=${env.DOCKER_ID}-${IMAGE_NAME}-${env.BUILD_ID},S3Key=Dockerrun.aws.json"
+                sh "aws elasticbeanstalk create-application-version --auto-create-application --application-name ${env.IMAGE_NAME} --version-label v${env.BUILD_ID} --source-bundle S3Bucket=${env.DOCKER_ID}-${IMAGE_NAME}-${env.BUILD_ID},S3Key=Dockerrun.aws.json"
 
                 echo " -> Deploying new version"
                 sh "aws elasticbeanstalk update-application-version --application-name ${env.IMAGE_NAME} --version-label v${env.BUILD_ID}"
