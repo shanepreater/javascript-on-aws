@@ -7,6 +7,7 @@ function App() {
   return (
     <div className="App" id="app">
       <header className="App-header" id="main-header">
+        <Jumbotron
         <a href="https://www.shanepreater.dev/"><img src={logo} className="App-logo" alt="logo" /></a>
       </header>
       <body id="main-content">
